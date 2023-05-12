@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('signature-requests', SignatureRequestController::class);
 
 });
-
+//Docuement Viewer
 Route::get('/documents/{filename}', [DocumentController::class, 'show'])->name('documents.show');
 
 require __DIR__.'/auth.php';

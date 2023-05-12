@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Redirect;
 class SignatureRequestController extends Controller
 {
 
-    public function index()
+    //Fetch records and display on the dashboard
+    public function index(): View|\Illuminate\Foundation\Application|Factory|Application
     {
         $user = Auth::user();
 
@@ -33,12 +34,13 @@ class SignatureRequestController extends Controller
         return view('dashboard', compact('signatureRequests'));
     }
 
+    //Show details of one Signature Request
     public function show(SignatureRequest $signatureRequest): View|\Illuminate\Foundation\Application|Factory|Application
     {
         return view('signature-requests.show', compact('signatureRequest'));
     }
 
-    //
+    //Get a SignatureRequest Form
     public function create(): View|\Illuminate\Foundation\Application|Factory|Application
     {
         $documentTypes = DocumentType::all();
@@ -48,6 +50,7 @@ class SignatureRequestController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        //validating all input fields
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -61,10 +64,10 @@ class SignatureRequestController extends Controller
             'signatory_position.*' => 'required|string|max:255',
         ]);
 
-        // Upload document
+        // Storing uploaded document on filesystem
         $documentPath = $request->file('document')->store('documents');
 
-        // Create signature request
+        // Create signature request record into database
         $signatureRequest = SignatureRequest::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
@@ -87,7 +90,7 @@ class SignatureRequestController extends Controller
             ]);
         }
 
-        // Save signatories
+        // Save signatories in database
         $signatureRequest->signatories()->saveMany($signatories);
 
         // Redirect or return response
