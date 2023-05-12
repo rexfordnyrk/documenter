@@ -13,6 +13,7 @@ class Signatory extends Model
         'email',
         'position',
         'signature_request_id',
+        'ds_signature_id',
         'status',
     ];
 

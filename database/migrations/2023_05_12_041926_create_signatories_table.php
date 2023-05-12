@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('position');
+            $table->string('ds_signature_id')->nullable();
             $table->unsignedBigInteger('signature_request_id');
             $table->foreign('signature_request_id')->references('id')->on('signature_requests')->onDelete('cascade');
             $table->string('status');
