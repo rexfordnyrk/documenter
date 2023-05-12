@@ -14,9 +14,12 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+         \App\Models\User::create([
+             'name' => 'Docs Admin',
+             'email' => 'documenter@yopmail.com',
+             'job_title' => 'C.E.O',
+             'password' => bcrypt('123456'),
+         ]);
+        $this::call(DocumentTypeSeeder::class);
     }
 }
