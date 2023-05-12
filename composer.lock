@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d26b8fdc29fa4d148f63ef4051b155ea",
+    "content-hash": "f8d36351eef0b028fdd1388c100afa1e",
     "packages": [
         {
             "name": "brick/math",
@@ -364,6 +364,69 @@
                 }
             ],
             "time": "2022-09-10T18:51:20+00:00"
+        },
+        {
+            "name": "dropbox/sign",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:hellosign/dropbox-sign-php.git",
+                "reference": "a5a07bd7bbc7de14c16a5792a53399e9d6e1a6e9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hellosign/dropbox-sign-php/zipball/a5a07bd7bbc7de14c16a5792a53399e9d6e1a6e9",
+                "reference": "a5a07bd7bbc7de14c16a5792a53399e9d6e1a6e9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "^7.3",
+                "guzzlehttp/psr7": "^1.7 || ^2.0",
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "3.4.*",
+                "phpunit/phpunit": "^8.0 || ^9.0",
+                "symfony/yaml": "^5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dropbox\\Sign\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dropbox Sign",
+                    "email": "apisupport@hellosign.com",
+                    "homepage": "https://hellosign.com"
+                },
+                {
+                    "name": "OpenAPI-Generator contributors",
+                    "homepage": "https://openapi-generator.tech"
+                }
+            ],
+            "description": "Official Dropbox Sign APIv3 PHP SDK",
+            "homepage": "https://hellosign.com",
+            "keywords": [
+                "api",
+                "dropboxsign",
+                "hellosign",
+                "openapi",
+                "openapi-generator",
+                "openapitools",
+                "php",
+                "rest",
+                "sdk"
+            ],
+            "time": "2023-03-13T16:31:13+00:00"
         },
         {
             "name": "egulias/email-validator",
