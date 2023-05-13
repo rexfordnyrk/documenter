@@ -62,17 +62,33 @@
                 </div>
                 <div>
                     <a href="{{ route('signature-requests.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back</a>
+                    <a href="#" onclick="signDoc()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Sign Document</a>
                 </div>
                 <div class="mt-4">
                     <label for="document" class="block text-yellow-500 font-bold">Document:</label>
                     <div id="document" class="bg-gray-700 rounded-lg">
-{{--                        <embed src="{{ route('documents.show', ['filename' => $signatureRequest->document]) }}" type="application/pdf" width="100%" height="500px">--}}
+{{--                        {{ dd($signatureRequest->sign_url) }}--}}
                         <embed src="{{ '/'.$signatureRequest->document }}" type="application/pdf" width="100%" height="800px">
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script src="/embedded.production.min.js"></script>
+    <script>
+        //obtaining clientID from .env file
+        clientid = '{!! env('DS_CLIENT_ID')  !!}';
+        //assigning the url
+        signUrl = '{!! $signatureRequest->sign_url !!}';
 
+        function signDoc() {
+            const client = new HelloSign();
+            client.open( signUrl, {
+                clientId: clientid,
+                skipDomainVerification: true,
+                testMode: true
+            });
+        }
+    </script>
 </x-app-layout>
 

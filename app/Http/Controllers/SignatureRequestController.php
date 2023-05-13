@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DocumentType;
 use App\Models\Signatory;
 use App\Models\SignatureRequest;
+use Dropbox\Sign\Api\EmbeddedApi;
 use Dropbox\Sign\Api\SignatureRequestApi;
 use Dropbox\Sign\ApiException;
 use Dropbox\Sign\Configuration;
@@ -39,13 +40,34 @@ class SignatureRequestController extends Controller
                 ->orWhereHas('signatories', function ($query) use ($user) {
                     $query->where('email', $user->email);
                 })
-                ->get();        }
+                ->get();
+        }
         return view('dashboard', compact('signatureRequests'));
     }
 
     //Show details of one Signature Request
     public function show(SignatureRequest $signatureRequest): View|\Illuminate\Foundation\Application|Factory|Application
     {
+        //getting default configuration
+        $config = Configuration::getDefaultConfiguration();
+        // Configure HTTP basic authorization: api_key
+        $config->setUsername(env('DS_API_KEY'));
+        $embeddedApi = new EmbeddedApi($config);
+
+        //obtaining signing id if the current user is a signatory
+        $signatory = $signatureRequest->signatories->where('email','rexfordnyrk@gmail.com')->first();
+        if ($signatory != null){
+            //if the current user is a valid signatory then generate embedded sign url using their signature_id
+            try {
+                $result = $embeddedApi->embeddedSignUrl($signatory->ds_signature_id);
+                $signatureRequest['sign_url']=$result->getEmbedded()->getSignUrl();
+            } catch (ApiException $e) {
+                $error = $e->getResponseObject();
+                return view('signature-requests.show', compact('signatureRequest'))
+                    ->with('error', 'There was an error completing your request.Please contact tech support.\n'.$error);
+            }
+        }
+
         return view('signature-requests.show', compact('signatureRequest'));
     }
 
@@ -102,7 +124,6 @@ class SignatureRequestController extends Controller
         $results = $this->performDSRequest($signatories, $signatureRequest);
         if ($results instanceof SignatureRequestGetResponse) {
 
-            echo $results;
             $signatureRequest->reference_id = $results->getSignatureRequest()->getSignatureRequestId();
             $signatureRequest->save();
             $signers = $results->getSignatureRequest()->getSignatures();
@@ -124,7 +145,7 @@ class SignatureRequestController extends Controller
         $signatureRequest->signatories()->saveMany($signatories);
 
         // Redirect or return response
-        return Redirect::to('/')->with('success', 'Signature request created successfully.');
+        return Redirect::to('/dashboard')->with('success', 'Signature request created successfully.');
     }
 
     public function performDSRequest(Array $signatories, SignatureRequest $request){
@@ -158,7 +179,7 @@ class SignatureRequestController extends Controller
         $data = new SignatureRequestCreateEmbeddedRequest();
         //using client id place in .env file
         $data->setClientId(env('DS_CLIENT_ID'))
-            ->setTitle("New Signature Request")
+            ->setTitle($request->title)
             ->setSubject($request->title)
             ->setMessage($request->description)
             ->setSigners($signers)
