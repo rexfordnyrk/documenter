@@ -55,7 +55,7 @@ class SignatureRequestController extends Controller
         $embeddedApi = new EmbeddedApi($config);
 
         //obtaining signing id if the current user is a signatory
-        $signatory = $signatureRequest->signatories->where('email','rexfordnyrk@gmail.com')->first();
+        $signatory = $signatureRequest->signatories->where('email',Auth::user()->email)->first();
         if ($signatory != null){
             //if the current user is a valid signatory then generate embedded sign url using their signature_id
             try {

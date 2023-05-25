@@ -62,12 +62,13 @@
                 </div>
                 <div>
                     <a href="{{ route('signature-requests.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back</a>
-                    <a href="#" onclick="signDoc()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Sign Document</a>
+                    @if (isset($signatureRequest->sign_url))
+                        <a href="#" onclick="signDoc()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Sign Document</a>
+                    @endif
                 </div>
                 <div class="mt-4">
                     <label for="document" class="block text-yellow-500 font-bold">Document:</label>
                     <div id="document" class="bg-gray-700 rounded-lg">
-{{--                        {{ dd($signatureRequest->sign_url) }}--}}
                         <embed src="{{ '/'.$signatureRequest->document }}" type="application/pdf" width="100%" height="800px">
                     </div>
                 </div>
